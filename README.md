@@ -81,7 +81,7 @@ Her kullanıcıya özel token ile güvenli istekler yapılır.
 ## 🛠️ Kullanılan Teknolojiler
 
 
-- Ntier Architecture (Katmanlı Mimari)
+##### Ntier Architecture (Katmanlı Mimari)
  Uygulama sunum, iş mantığı, veri erişimi ve veri katmanlarına ayrılmıştır. Bakım, test ve yeniden kullanılabilirlik açısından avantaj sağlar.
   
 - ASP.NET Core Web API
