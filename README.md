@@ -44,6 +44,9 @@ Her kullanıcıya özel token ile güvenli istekler yapılır.
 - Kod tekrarını azaltır, UI tarafında bakım kolaylığı sağlar.
 
 
+### 🔎 Area Yapısı
+- Uygulamada farklı roller (User, Dietitian, Secretary) için sayfa ve controller ayrımı sağlar.
+
 -----
 
 
@@ -79,31 +82,31 @@ Her kullanıcıya özel token ile güvenli istekler yapılır.
 
 
 - Ntier Architecture (Katmanlı Mimari)
--- Uygulama sunum, iş mantığı, veri erişimi ve veri katmanlarına ayrılmıştır. Bakım, test ve yeniden kullanılabilirlik açısından avantaj sağlar.
+ Uygulama sunum, iş mantığı, veri erişimi ve veri katmanlarına ayrılmıştır. Bakım, test ve yeniden kullanılabilirlik açısından avantaj sağlar.
   
 - ASP.NET Core Web API
--- RESTful mimariye uygun şekilde veri işlemleri bu katmanda gerçekleştirilir.
+ RESTful mimariye uygun şekilde veri işlemleri bu katmanda gerçekleştirilir.
 
 - JWT (JSON Web Token)
--- Kimlik doğrulama ve rol tabanlı yetkilendirme işlemleri için kullanılır.
+  Kimlik doğrulama ve rol tabanlı yetkilendirme işlemleri için kullanılır.
 
 - ASP.NET Core 7
--- Projenin temelini oluşturan modern ve modüler web çatısıdır.
+  Projenin temelini oluşturan modern ve modüler web çatısıdır.
 
--Microsoft SQL Server
--- Tüm verilerin saklandığı ilişkisel veritabanı sistemidir.
+- Microsoft SQL Server
+  Tüm verilerin saklandığı ilişkisel veritabanı sistemidir.
 
 - ViewComponent
--- UI tarafında tekrar kullanılabilir, modüler bileşenlerin geliştirilmesini sağlar.
+  UI tarafında tekrar kullanılabilir, modüler bileşenlerin geliştirilmesini sağlar.
 
 - Area Yapısı
--- Uygulamada farklı roller (User, Dietitian, Secretary) için sayfa ve controller ayrımı sağlar.
+  Uygulamada farklı roller (User, Dietitian, Secretary) için sayfa ve controller ayrımı sağlar.
 
 - jQuery + AJAX
--- Sayfa yenilemeden veri alma ve gönderme işlemleri için kullanılır.
+  Sayfa yenilemeden veri alma ve gönderme işlemleri için kullanılır.
 
 - Bootstrap 5
--- Kullanıcı arayüzünün mobil uyumlu ve modern görünmesini sağlayan CSS framework’tür.
+  Kullanıcı arayüzünün mobil uyumlu ve modern görünmesini sağlayan CSS framework’tür.
 
 
 
