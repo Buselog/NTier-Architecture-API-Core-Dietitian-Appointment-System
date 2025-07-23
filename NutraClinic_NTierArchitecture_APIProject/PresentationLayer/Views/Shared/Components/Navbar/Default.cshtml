@@ -1,0 +1,67 @@
+﻿@model (string role, string fullName)
+
+<nav class="navbar navbar-expand-lg">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="#">NutraClinic</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+				@if (Model.role == "User")
+				{
+					<li class="nav-item"><a class="nav-link scroll-link" href="#home">Home</a></li>
+					<li class="nav-item"><a class="nav-link scroll-link" href="#departments">Departments</a></li>
+					<li class="nav-item"><a class="nav-link scroll-link" href="#dietitians">Dietitians</a></li>
+					<li class="nav-item"><a class="nav-link scroll-link" href="#appointment">Make an Appointment</a></li>
+					<li class="nav-item"><a class="nav-link scroll-link" href="#my-appointments">My Appointments</a></li>
+				}
+				else if (Model.role == "Dietitian")
+				{
+					<li class="nav-item"><a class="nav-link scroll-link" href="#home">Home</a></li>
+					<li class="nav-item"><a class="nav-link scroll-link" href="#profile">Profile</a></li>
+					<li class="nav-item"><a class="nav-link scroll-link" href="#calendar">Calendar</a></li>
+				}
+				else if (Model.role == "Secretary")
+				{
+					<li class="nav-item"><a class="nav-link scroll-link" href="#home">Home</a></li>
+					<li class="nav-item"><a class="nav-link scroll-link" href="#dietitian-mgmt">Dietitian Management</a></li>
+					<li class="nav-item"><a class="nav-link scroll-link" href="#specialty-mgmt">Specialty Management</a></li>
+					<li class="nav-item"><a class="nav-link scroll-link" href="#pending-appointments">Pending Appointments</a></li>
+				}
+
+			</ul>
+
+			<ul class="navbar-nav">
+				@if (!string.IsNullOrEmpty(Model.fullName))
+				{
+					<li class="nav-item">
+						@if (Model.role == "Dietitian")
+						{
+							<span class="navbar-text me-3">Hi, Dr @Model.fullName</span>
+						}
+						else if (Model.role == "Secretary")
+						{
+							<span class="navbar-text me-3">Hi, Secretary @Model.fullName</span>
+						}
+						else
+						{
+							<span class="navbar-text me-3">Hi, @Model.fullName</span>
+						}
+
+					</li>
+					<li class="nav-item">
+						<a class="btn btn-outline-light" asp-area="Auth" asp-controller="Account" asp-action="Logout">Logout</a>
+					</li>
+				}
+				else
+				{
+					<li class="nav-item">
+						<a class="btn btn-light" asp-area="Auth" asp-controller="Account" asp-action="Login">Giriş</a>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+</nav>

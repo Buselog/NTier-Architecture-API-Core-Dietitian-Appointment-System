@@ -1,0 +1,76 @@
+﻿@model PresentationLayer.Areas.Secretary.ViewModels.DietitianCreateVM
+@{
+    ViewData["Title"] = "Add Dietitian";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="form-shell form-shell-gradient">
+    <div class="form-glass-card">
+        <h2 class="form-title">Add New Dietitian</h2>
+        <p class="form-subtitle">Create a professional profile for a new staff member.</p>
+
+        @if (ViewBag.ErrorDetails != null)
+        {
+            <div style="color:red">@ViewBag.ErrorDetails</div>
+        }
+
+
+        <form asp-action="Create" method="post" autocomplete="off">
+            <div class="form-grid">
+                <div class="fg">
+                    <label>Full Name</label>
+                    <input asp-for="FullName" class="fg-input" />
+                    <span asp-validation-for="FullName" class="fg-val"></span>
+                </div>
+                <div class="fg">
+                    <label>Email</label>
+                    <input asp-for="Email" class="fg-input" />
+                    <span asp-validation-for="Email" class="fg-val"></span>
+                </div>
+                <div class="fg">
+                    <label>Password</label>
+                    <input asp-for="Password" type="password" class="fg-input" />
+                    <span asp-validation-for="Password" class="fg-val"></span>
+                </div>
+                <div class="fg">
+                    <label>Specialty</label>
+                    <select asp-for="SpecialtyId" class="fg-input">
+                        <option value="">-- Select --</option>
+                        @foreach (var sp in (IEnumerable<dynamic>)ViewBag.Specialties)
+                        {
+                            <option value="@sp.specialtyId">@sp.name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="SpecialtyId" class="fg-val"></span>
+                </div>
+                <div class="fg">
+                    <label>Working Days</label>
+                    <input asp-for="WorkingDays" class="fg-input" placeholder="Mon-Fri" />
+                </div>
+                <div class="fg">
+                    <label>Working Hours</label>
+                    <input asp-for="WorkingHours" class="fg-input" placeholder="09:00-17:00" />
+                </div>
+                <div class="fg fg-full">
+                    <label>Photo URL</label>
+                    <input asp-for="ProfilePhotoUrl" class="fg-input" />
+                </div>
+                <div class="fg fg-full">
+                    <label>Biography</label>
+                    <textarea asp-for="Biography" rows="4" class="fg-input"></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a asp-area="Secretary" asp-controller="Home" asp-action="Index" class="btn-cancel">Cancel</a>
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-check"></i> Save
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

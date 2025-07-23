@@ -1,0 +1,62 @@
+﻿@model PresentationLayer.ViewModels.LoginViewModel
+
+<head>
+    <link rel="stylesheet" href="~/login/css/login.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body>
+    <video autoplay muted loop id="bgVideo">
+        <source src="~/login/videos/background.mp4" type="video/mp4" />
+        Tarayıcınız video etiketini desteklemiyor.
+    </video>
+    <div id="videoOverlay"></div>
+
+    <div class="login-card">
+        <div class="login-header">
+            <img src="~/login/img/diet.png" alt="NutraClinic Logo" class="login-logo" />
+            <h2>NutraClinic</h2>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger text-center" style="margin-bottom:10px;">
+                @ViewBag.Error
+            </div>
+        }
+        <div asp-validation-summary="ModelOnly" class="text-danger text-center" style="margin-bottom:10px;"></div>
+
+        <form asp-action="Login" method="post">
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input asp-for="Email" placeholder="E-posta" class="form-control" />
+                </div>
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input asp-for="Password" placeholder="Şifre" type="password" class="form-control" />
+                </div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" style="width:100%; margin-top:15px;">
+                <i class="fa-solid fa-sign-in-alt"></i> Login
+            </button>
+        </form>
+    </div>
+
+</body>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

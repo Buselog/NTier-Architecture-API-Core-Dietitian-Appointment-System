@@ -1,0 +1,436 @@
+﻿@model PresentationLayer.Areas.Secretary.ViewModels.SecretaryDashboardViewModel
+@{
+	ViewData["Title"] = "Secretary Dashboard";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section id="home" class="sec-hero">
+	<video autoplay muted loop class="sec-hero-video">
+		<source src="~/videos/secretaryhome.mp4" type="video/mp4" />
+	</video>
+	<div class="sec-hero-overlay"></div>
+
+	<div class="sec-hero-inner container">
+
+		<h1 class="sec-hero-title">Hi, @Model.SecretaryName</h1>
+
+		<p class="sec-hero-subtitle">NutraClinic Secretary Panel</p>
+
+
+		<div class="row g-4 sec-metric-row">
+			<div class="col-6 col-lg-3">
+				<div class="metric-card glass">
+					<div class="metric-label">Dietitians</div>
+					<div class="metric-value">@Model.TotalDietitians</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-3">
+				<div class="metric-card glass">
+					<div class="metric-label">Specialties</div>
+					<div class="metric-value">@Model.TotalSpecialties</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-3">
+				<div class="metric-card glass">
+					<div class="metric-label">Users</div>
+					<div class="metric-value">@Model.TotalUsers</div>
+				</div>
+			</div>
+			<div class="col-6 col-lg-3">
+				<div class="metric-card glass">
+					<div class="metric-label">Pending Appts</div>
+					<div class="metric-value">@Model.PendingAppointments</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+<section id="dietitian-mgmt" class="dietitian-mgmt-section">
+	<div class="container">
+		<div class="sec-block-header">
+			<div>
+				<h2 class="sec-block-title">Dietitian Management</h2>
+				<p class="sec-block-desc">Manage professional staff profiles.</p>
+			</div>
+			<a class="btn glass-btn" asp-area="Secretary" asp-controller="Dietitian" asp-action="Create">
+				<i class="fa-solid fa-user-plus"></i> Add Dietitian
+			</a>
+		</div>
+
+		@if (Model.Dietitians == null || !Model.Dietitians.Any())
+		{
+			<div class="empty-state">No dietitians found.</div>
+		}
+		else
+		{
+			<div class="row g-4">
+				@foreach (var d in Model.Dietitians)
+				{
+					<div class="col-12 col-sm-6 col-lg-3">
+						<div class="diet-card glass">
+							<div class="diet-card-actions">
+
+								<button type="button" class="icon-btn del-btn"
+										title="Delete" onclick="deleteDietitian(@d.DietitianId)">
+									<i class="fa-solid fa-trash-can"></i>
+								</button>
+
+							</div>
+							<div class="diet-card-inner">
+								<div class="diet-card-photo">
+									<img src="@d.ProfilePhotoUrl"
+										 alt="@d.FullName"
+										 onerror="this.src='/img/default-user.png';">
+								</div>
+								<div class="diet-card-info">
+									<h5 class="diet-name">@d.FullName</h5>
+									<div class="diet-spec">
+										<i class="fa-solid fa-leaf"></i> @d.SpecialtyName
+									</div>
+									<div class="diet-days">
+										<i class="fa-regular fa-calendar"></i> @d.WorkingDays
+									</div>
+									<div class="diet-hours">
+										<i class="fa-regular fa-clock"></i> @d.WorkingHours
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		}
+	</div>
+</section>
+
+<section id="specialty-mgmt" class="specialty-mgmt-section">
+	<div class="container">
+		<div class="sec-block-header">
+			<div>
+				<h2 class="sec-block-title">Specialty Management</h2>
+				<p class="sec-block-desc">Configure the clinic’s expertise areas.</p>
+			</div>
+			<a class="btn glass-btn" asp-area="Secretary" asp-controller="Specialty" asp-action="Create">
+				<i class="fa-solid fa-plus"></i> Add Specialty
+			</a>
+		</div>
+
+		@if (Model.Specialties == null || !Model.Specialties.Any())
+		{
+			<div class="empty-state">No specialties found.</div>
+		}
+		else
+		{
+			<div class="row g-3 specialty-grid">
+				@foreach (var s in Model.Specialties)
+				{
+					<div class="col-6 col-md-4 col-lg-3 col-xxl-2">
+						<div class="specialty-card glass">
+							<div class="specialty-name">@s.Name</div>
+							<div class="specialty-actions">
+								<a asp-area="Secretary" asp-controller="Specialty" asp-action="Edit" asp-route-id="@s.SpecialtyId"
+								   class="icon-btn edit-btn" title="Edit">
+									<i class="fa-solid fa-pen"></i>
+								</a>
+								<button class="icon-btn del-btn" title="Delete"
+										onclick="deleteSpecialty(@s.SpecialtyId)">
+									<i class="fa-solid fa-xmark"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		}
+	</div>
+</section>
+
+<section id="pending-appointments" class="sec-pending-section">
+	<div class="sec-pending-overlay"></div>
+	<div class="container position-relative sec-pending-wrapper">
+
+		<div class="text-center mb-5">
+			<h2 class="sec-pending-title">Appointments Awaiting Approval</h2>
+			<p class="sec-pending-desc">Review pending bookings and approve or reject.</p>
+		</div>
+
+		<div class="row justify-content-center mb-4">
+			<div class="col-md-6">
+				<select id="pending-dietitian-filter" class="form-select">
+					<option value="">-- All Dietitians --</option>
+
+					@if (Model.Dietitians != null)
+					{
+						foreach (var d in Model.Dietitians)
+						{
+							<option value="@d.DietitianId">@d.FullName</option>
+						}
+					}
+				</select>
+			</div>
+		</div>
+
+		<div id="pending-appt-container" class="sec-pending-grid">
+		</div>
+	</div>
+</section>
+
+
+@section Scripts {
+
+	<script>
+		function deleteDietitian(id){
+			Swal.fire({
+				title: 'Delete dietitian?',
+				text: 'This action cannot be undone.',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Yes, delete',
+				cancelButtonText: 'Cancel'
+			}).then(res => {
+				if(res.isConfirmed){
+					fetch(`/Secretary/Dietitian/Delete?id=${id}`, { method: 'DELETE' })
+					  .then(r=>r.json())
+					  .then(d=>{
+						  if(d.success){
+							  Swal.fire({icon:'success',title:'Deleted',timer:1500,showConfirmButton:false});
+							  setTimeout(()=>location.reload(),1200);
+						  } else {
+							  Swal.fire({icon:'error',title:'Failed',text:d.message||'Error'});
+						  }
+					  })
+					  .catch(()=>{
+						  Swal.fire({icon:'error',title:'Error',text:'Request failed.'});
+					  });
+				}
+			});
+		}
+
+		function deleteSpecialty(id){
+			Swal.fire({
+				title: 'Delete specialty?',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Delete',
+				cancelButtonText: 'Cancel'
+			}).then(res=>{
+				if(res.isConfirmed){
+					fetch(`/Secretary/Specialty/Delete?id=${id}`, { method: 'DELETE' })
+					  .then(r=>r.json())
+					  .then(d=>{
+						  if(d.success){
+							  Swal.fire({icon:'success',title:'Deleted',timer:1400,showConfirmButton:false});
+							  setTimeout(()=>location.reload(),1100);
+						  } else {
+							  Swal.fire({icon:'error',title:'Failed',text:d.message||'Error'});
+						  }
+					  })
+					  .catch(()=>{
+						  Swal.fire({icon:'error',title:'Error',text:'Request failed.'});
+					  });
+				}
+			});
+		}
+	</script>
+
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	@if (TempData["ToastMessage"] != null)
+	{
+		<script>
+			Swal.fire({
+				toast: true,
+				position: 'top-end',
+				icon: 'success',
+				title: '@TempData["ToastMessage"]',
+				showConfirmButton: false,
+				timer: 2500,
+				timerProgressBar: true
+			});
+		</script>
+	}
+
+
+	<script>
+		(function(){
+			const filterEl = document.getElementById('pending-dietitian-filter');
+			const container = document.getElementById('pending-appt-container');
+
+			if (!filterEl || !container) return;
+
+			filterEl.addEventListener('change', loadPending);
+			document.addEventListener('DOMContentLoaded', loadPending);
+
+			function loadPending(){
+				const id = filterEl.value;
+				let url = '/Secretary/AppointmentAdmin/Pending';
+				if (id) url += '?dietitianId=' + encodeURIComponent(id);
+
+				container.innerHTML = '<div class="sec-pending-loading">Loading...</div>';
+
+				fetch(url)
+				 .then(r => {
+					if(!r.ok) throw new Error('load fail');
+					return r.json();
+				 })
+				 .then(data => renderPendingList(data))
+				 .catch(err => {
+					console.error(err);
+					container.innerHTML = '<div class="sec-pending-empty text-danger">Load failed.</div>';
+				 });
+			}
+
+			function renderPendingList(list){
+				if (!Array.isArray(list) || list.length === 0){
+					container.innerHTML = '<div class="sec-pending-empty">No pending appointments.</div>';
+					return;
+				}
+				container.innerHTML = '';
+				list.forEach(item => {
+					const dateDisp = formatDate(item.appointmentDate);
+					const timeDisp = formatTimeRange(item.startTime, item.endTime);
+
+					const card = document.createElement('div');
+					card.className = 'sec-pending-card';
+
+					card.innerHTML = `
+						<div class="sec-pending-card-body">
+							<div class="sec-pending-names">
+								<div class="sec-pending-user"><i class="fa-solid fa-user"></i> ${escapeHtml(item.userName)}</div>
+								<div class="sec-pending-diet"><i class="fa-solid fa-stethoscope"></i> ${escapeHtml(item.dietitianName)}</div>
+							</div>
+							<div class="sec-pending-spec">
+								<i class="fa-solid fa-leaf"></i> ${escapeHtml(item.specialtyName || '')}
+							</div>
+							<div class="sec-pending-datetime">
+								<span><i class="fa-regular fa-calendar"></i> ${dateDisp}</span>
+								<span><i class="fa-regular fa-clock"></i> ${timeDisp}</span>
+							</div>
+						</div>
+						<div class="sec-pending-actions">
+							<button class="sec-pending-btn approve" data-id="${item.appointmentId}">
+								<i class="fa-solid fa-check"></i> Approve
+							</button>
+							<button class="sec-pending-btn reject" data-id="${item.appointmentId}">
+								<i class="fa-solid fa-xmark"></i> Reject
+							</button>
+						</div>
+					`;
+					container.appendChild(card);
+				});
+				container.querySelectorAll('.sec-pending-btn.approve').forEach(btn => {
+					btn.addEventListener('click', () => changeStatus(btn.dataset.id, 'Approve'));
+				});
+				container.querySelectorAll('.sec-pending-btn.reject').forEach(btn => {
+					btn.addEventListener('click', () => changeStatus(btn.dataset.id, 'Reject'));
+				});
+			}
+
+					function changeStatus(id, action) {
+			const status = action === 'Approve' ? 'Approved' : 'Rejected';
+			const url = action === 'Approve'
+				? `/Secretary/AppointmentAdmin/Approve?id=${id}`
+				: `/Secretary/AppointmentAdmin/Reject?id=${id}`;
+
+			Swal.fire({
+				title: `Are you sure?`,
+				text: `This appointment will be marked as ${status}.`,
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Yes, proceed',
+				cancelButtonText: 'Cancel',
+				background: 'rgba(255, 255, 255, 0.2)',
+				color: '#fff',
+				customClass: {
+					popup: 'blur-popup',
+					confirmButton: 'btn-green',
+					cancelButton: 'btn-red'
+				},
+				buttonsStyling: false,
+				didOpen: () => {
+					const swalContainer = document.querySelector('.swal2-container');
+					if (swalContainer) {
+						swalContainer.style.zIndex = '20000';
+					}
+				}
+			}).then((result) => {
+				if (result.isConfirmed) {
+					fetch(url, { method: 'PUT' })
+						.then(r => {
+							if (!r.ok) throw new Error('status change fail');
+							return r.json().catch(() => ({ message: 'Updated.' }));
+						})
+						.then(resp => {
+							Swal.fire({
+								title: 'Success',
+								text: resp.message || `Appointment ${status.toLowerCase()}.`,
+								icon: 'success',
+								showConfirmButton: false,
+								timer: 1800,
+								background: 'rgba(255, 255, 255, 0.2)',
+								color: '#fff',
+								customClass: {
+									popup: 'blur-popup'
+								},
+								buttonsStyling: false,
+								didOpen: () => {
+									const swalContainer = document.querySelector('.swal2-container');
+									if (swalContainer) {
+										swalContainer.style.zIndex = '20000';
+									}
+								}
+							});
+
+							setTimeout(() => {
+								window.location.reload();
+							}, 1800);
+
+						})
+						.catch(err => {
+							console.error(err);
+							Swal.fire({
+								title: 'Error',
+								text: 'Status change failed.',
+								icon: 'error',
+								confirmButtonText: 'OK',
+								background: 'rgba(255, 255, 255, 0.2)',
+								color: '#fff',
+								customClass: {
+									popup: 'blur-popup',
+									confirmButton: 'btn-green'
+								},
+								buttonsStyling: false,
+								didOpen: () => {
+									const swalContainer = document.querySelector('.swal2-container');
+									if (swalContainer) {
+										swalContainer.style.zIndex = '20000';
+									}
+								}
+							});
+						});
+				}
+			});
+		}
+
+			function formatDate(dtStr){
+				const date = new Date(dtStr);
+				return date.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+			}
+			function formatTimeRange(start, end){
+				return start.substring(0,5) + ' - ' + end.substring(0,5);
+			}
+			function escapeHtml(str){
+				if (str == null) return '';
+				return str.toString()
+					.replace(/&/g,'&amp;')
+					.replace(/</g,'&lt;')
+					.replace(/>/g,'&gt;')
+					.replace(/"/g,'&quot;')
+					.replace(/'/g,'&#39;');
+			}
+		})();
+	</script>
+
+}

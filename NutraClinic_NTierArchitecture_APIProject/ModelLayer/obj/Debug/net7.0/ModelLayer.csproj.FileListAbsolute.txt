@@ -1,0 +1,11 @@
+C:\Users\BUSE\source\repos\NutraClinic_NTierArchitecture_APIProject\ModelLayer\bin\Debug\net7.0\ModelLayer.deps.json
+C:\Users\BUSE\source\repos\NutraClinic_NTierArchitecture_APIProject\ModelLayer\bin\Debug\net7.0\ModelLayer.dll
+C:\Users\BUSE\source\repos\NutraClinic_NTierArchitecture_APIProject\ModelLayer\bin\Debug\net7.0\ModelLayer.pdb
+C:\Users\BUSE\source\repos\NutraClinic_NTierArchitecture_APIProject\ModelLayer\obj\Debug\net7.0\ModelLayer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\BUSE\source\repos\NutraClinic_NTierArchitecture_APIProject\ModelLayer\obj\Debug\net7.0\ModelLayer.AssemblyInfoInputs.cache
+C:\Users\BUSE\source\repos\NutraClinic_NTierArchitecture_APIProject\ModelLayer\obj\Debug\net7.0\ModelLayer.AssemblyInfo.cs
+C:\Users\BUSE\source\repos\NutraClinic_NTierArchitecture_APIProject\ModelLayer\obj\Debug\net7.0\ModelLayer.csproj.CoreCompileInputs.cache
+C:\Users\BUSE\source\repos\NutraClinic_NTierArchitecture_APIProject\ModelLayer\obj\Debug\net7.0\ModelLayer.dll
+C:\Users\BUSE\source\repos\NutraClinic_NTierArchitecture_APIProject\ModelLayer\obj\Debug\net7.0\refint\ModelLayer.dll
+C:\Users\BUSE\source\repos\NutraClinic_NTierArchitecture_APIProject\ModelLayer\obj\Debug\net7.0\ModelLayer.pdb
+C:\Users\BUSE\source\repos\NutraClinic_NTierArchitecture_APIProject\ModelLayer\obj\Debug\net7.0\ref\ModelLayer.dll

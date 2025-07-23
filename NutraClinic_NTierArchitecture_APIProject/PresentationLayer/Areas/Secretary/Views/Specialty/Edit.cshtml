@@ -1,0 +1,36 @@
+﻿@model PresentationLayer.Areas.Secretary.ViewModels.SpecialtyCreateEditVM
+@{
+    ViewData["Title"] = "Edit Specialty";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section class="form-shell form-shell-gradient alt">
+    <div class="form-glass-card">
+        <h2 class="form-title">Edit Specialty</h2>
+        <p class="form-subtitle">Change specialty name.</p>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="form-alert">@ViewBag.Error</div>
+        }
+
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="SpecialtyId" />
+            <div class="form-grid">
+                <div class="fg fg-full">
+                    <label>Name</label>
+                    <input asp-for="Name" class="fg-input" />
+                    <span asp-validation-for="Name" class="fg-val"></span>
+                </div>
+            </div>
+            <div class="form-actions">
+                <a asp-area="Secretary" asp-controller="Home" asp-action="Index" class="btn-cancel">Cancel</a>
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-save"></i> Update
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

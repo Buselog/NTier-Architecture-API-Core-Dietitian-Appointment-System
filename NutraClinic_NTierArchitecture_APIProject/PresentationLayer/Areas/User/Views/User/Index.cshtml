@@ -1,0 +1,671 @@
+﻿@model PresentationLayer.ViewModels.UserDashboardViewModel
+@{
+	ViewData["Title"] = "NutraClinic";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section id="home" class="hero-section">
+	<video autoplay muted loop class="hero-bg-video">
+		<source src="~/videos/userhome.mp4" type="video/mp4" />
+		Your browser does not support the video tag.
+	</video>
+	<div class="hero-overlay"></div>
+	<div class="hero-content text-center">
+		<h1 class="hero-text">Welcome to NutraClinic</h1>
+		<p class="hero-text">Professional dietitian support for a healthy life</p>
+		<a href="#departments" class="btn btn-outline-light scroll-link">Explore Our Services</a>
+	</div>
+</section>
+
+<section id="departments" class="specialty-section">
+	<div class="specialty-bg-overlay"></div>
+
+	<div class="container specialty-header text-center">
+		<h2 class="specialty-title">Nutrition & Wellness Focus Areas</h2>
+		<p class="specialty-desc">
+			From weight management to pediatric nutrition, our dietitians provide targeted, evidence‑based care across multiple specialties.
+		</p>
+	</div>
+
+	<div class="specialty-carousel-wrapper">
+		<div class="specialty-carousel-track">
+			@foreach (var sp in Model.Specialties)
+			{
+				<div class="specialtycarduser-card">
+					<span class="specialty-card-text">@sp.Name</span>
+				</div>
+			}
+			@foreach (var sp in Model.Specialties)
+			{
+				<div class="specialtycarduser-card">
+					<span class="specialty-card-text">@sp.Name</span>
+				</div>
+			}
+		</div>
+	</div>
+</section>
+
+<section id="dietitians" class="dietitian-section">
+	<div class="dietitian-overlay"></div>
+	<div class="container text-center mb-5">
+		<h2 class="dietitian-title">Meet Our Dietitians</h2>
+		<p class="dietitian-desc">
+			Licensed nutrition experts ready to guide you toward healthier habits.
+		</p>
+	</div>
+
+	<div class="container">
+		<div class="row dietitian-grid">
+			@if (Model.Dietitians != null && Model.Dietitians.Any())
+			{
+				foreach (var d in Model.Dietitians)
+				{
+					<div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+						<div class="dietitian-card"
+							 data-dietitian-id="@d.DietitianId"
+							 data-dietitian-name="@d.FullName"
+							 data-dietitian-specialty="@d.SpecialtyName"
+							 data-dietitian-biography="@d.Biography"
+							 data-dietitian-workingdays="@d.WorkingDays"
+							 data-dietitian-workinghours="@d.WorkingHours"
+							 data-dietitian-photo="@d.ProfilePhotoUrl">
+
+							<div class="dietitian-card-img-wrapper">
+								<img src="@d.ProfilePhotoUrl"
+									 onerror="this.src='/img/default-user.png';"
+									 alt="@d.FullName" />
+							</div>
+							<div class="dietitian-card-body">
+								<h5 class="dietitian-card-name">@d.FullName</h5>
+								<p class="dietitian-card-specialty">@d.SpecialtyName</p>
+								<button type="button" class="btn btn-outline-light dietitian-view-btn">
+									View Profile
+								</button>
+							</div>
+						</div>
+					</div>
+				}
+			}
+			else
+			{
+				<div class="col-12 text-center text-muted">
+					No dietitians found.
+				</div>
+			}
+		</div>
+	</div>
+</section>
+
+<section id="appointment" class="appointment-section">
+	<div class="appointment-overlay"></div>
+	<div class="container text-center mb-5">
+		<h2 class="appointment-title">Make an Appointment</h2>
+		<p class="appointment-desc">Select a dietitian and pick an available day & time.</p>
+	</div>
+
+
+	<div class="container">
+		<div id="calendar-grid" class="calendar-grid">
+		
+		</div>
+	</div>
+</section>
+
+<section id="my-appointments" class="my-appts-section">
+	<video autoplay muted loop class="my-appts-bg-video">
+		<source src="~/videos/myappointments.mp4" type="video/mp4" />
+		Your browser does not support the video tag.
+	</video>
+	<div class="my-appts-overlay"></div> 
+
+	<div class="container text-center mb-5">
+		<h2 class="my-appts-title">My Appointments</h2>
+		<p class="my-appts-desc">Track your pending, approved, cancelled and past sessions.</p>
+	</div>
+
+	<!-- Filtre bar -->
+	<div class="container mb-4">
+		<div class="appts-filter-bar">
+			<button class="appts-filter-btn active" data-filter="all">All</button>
+			<button class="appts-filter-btn" data-filter="upcoming">Upcoming</button>
+			<button class="appts-filter-btn" data-filter="pending">Pending</button>
+			<button class="appts-filter-btn" data-filter="approved">Approved</button>
+			<button class="appts-filter-btn" data-filter="rejected">Rejected</button>
+			<button class="appts-filter-btn" data-filter="cancelled">Cancelled</button>
+			<button class="appts-filter-btn" data-filter="past">Past</button>
+		</div>
+	</div>
+
+	<div class="container" id="my-appts-container">
+		<div class="appts-loading">Loading appointments...</div>
+	</div>
+</section>
+
+
+<div id="dietitianProfileOverlay" class="dietitian-profile-overlay" style="display:none;">
+	<div class="dietitian-profile-backdrop"></div>
+	<div class="dietitian-profile-card">
+		<button type="button" class="dietitian-profile-close" aria-label="Close">&times;</button>
+
+		<div class="dietitian-profile-content">
+			<div class="dietitian-profile-photo-wrap">
+				<img id="dp-photo" src="/img/default-user.png" alt="Dietitian Photo" />
+			</div>
+			<div class="dietitian-profile-details">
+				<h3 id="dp-name"></h3>
+				<h5 id="dp-specialty" class="dp-specialty"></h5>
+				<p id="dp-biography" class="dp-bio"></p>
+				<div class="dp-meta">
+					<div><strong>Working Days:</strong> <span id="dp-days"></span></div>
+					<div><strong>Working Hours:</strong> <span id="dp-hours"></span></div>
+				</div>
+
+				<div class="dp-actions mt-4">
+					<a id="dp-appointment-btn" href="#make-appointment" class="btn btn-success scroll-link">
+						Make an Appointment
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="time-slot-overlay" class="time-slot-overlay" style="display:none;">
+	<div class="time-slot-content">
+		<button type="button" class="time-slot-close-btn close-time-slot" aria-label="Close">&times;</button>
+
+		<h3 class="time-slot-title">
+			Available Hours: <span id="selected-date-text"></span>
+		</h3>
+
+		<div id="time-slot-list" class="time-slot-list">
+		
+		</div>
+
+		<div class="mt-4">
+			<button class="btn btn-primary" id="confirm-appointment" disabled>Confirm Appointment</button>
+			<button class="btn btn-outline-light ms-2 close-time-slot">Cancel</button>
+		</div>
+	</div>
+</div>
+
+<style>
+	.swal2-popup {
+		background: rgba(255, 255, 255, 0.1) !important;
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		border-radius: 16px;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+		color: white;
+	}
+
+	.swal2-title {
+		color: white !important;
+	}
+
+	.swal2-html-container {
+		color: #e0e0e0 !important;
+	}
+
+	.swal2-confirm {
+		background-color: #28a745 !important;
+		border: none !important;
+		color: white !important;
+		border-radius: 10px !important;
+	}
+</style>
+
+
+@section Scripts {
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script>
+		(function(){
+
+			let allAppointments = [];
+
+			document.addEventListener('DOMContentLoaded', () => {
+				loadUserAppointments();
+				wireFilterButtons();
+			});
+
+			function loadUserAppointments(){
+				const container = document.getElementById('my-appts-container');
+				container.innerHTML = '<div class="appts-loading">Loading appointments...</div>';
+
+				fetch('/User/AppointmentProxy/UserAppointments')
+					.then(r => {
+						if(!r.ok) throw new Error('Load fail');
+						return r.json();
+					})
+					.then(data => {
+						allAppointments = Array.isArray(data) ? data : [];
+						renderAppointments();
+					})
+					.catch(err => {
+						console.error(err);
+						container.innerHTML = '<div class="appts-empty text-danger">Randevular yüklenemedi.</div>';
+					});
+			}
+
+			function wireFilterButtons(){
+				const btns = document.querySelectorAll('.appts-filter-btn');
+				btns.forEach(btn => {
+					btn.addEventListener('click', () => {
+						btns.forEach(b => b.classList.remove('active'));
+						btn.classList.add('active');
+						renderAppointments(btn.getAttribute('data-filter'));
+					});
+				});
+			}
+
+			function renderAppointments(filter = 'all'){
+				const container = document.getElementById('my-appts-container');
+				if (allAppointments.length === 0){
+					container.innerHTML = '<div class="appts-empty">You have no appointments yet.</div>';
+					return;
+				}
+
+				const now = new Date();
+				let list = allAppointments.map(a => {
+					const dateOnly = new Date(a.appointmentDate);
+					const startParts = a.startTime.split(':'); 
+					if (startParts.length >= 2){
+						dateOnly.setHours(parseInt(startParts[0]), parseInt(startParts[1]), 0, 0);
+					}
+					const isPast = dateOnly < now && (a.status === 'Approved' || a.status === 'Pending');
+
+					return {
+						...a,
+						isPast: isPast
+					};
+				});
+
+				if (filter !== 'all'){
+					list = list.filter(a => {
+						switch(filter){
+							case 'pending': return a.status === 'Pending';
+							case 'approved': return a.status === 'Approved' && !a.isPast;
+							case 'rejected': return a.status === 'Rejected';
+							case 'cancelled': return a.status === 'Cancelled';
+							case 'past': return a.isPast;
+							case 'upcoming': return !a.isPast && (a.status === 'Approved' || a.status === 'Pending');
+							default: return true;
+						}
+					});
+				}
+
+				if (list.length === 0){
+					container.innerHTML = '<div class="appts-empty">No appointments in this category.</div>';
+					return;
+				}
+
+				container.innerHTML = '';
+				list.forEach(a => {
+					const statusClass = mapStatusClass(a);
+					const statusLabel = mapStatusLabel(a);
+					const canCancel = (a.status === 'Pending' || a.status === 'Approved') && !a.isPast;
+
+					const start = a.startTime.substring(0,5);
+					const end = a.endTime.substring(0,5);
+					const dateStr = formatDateDisplay(a.appointmentDate);
+
+					const card = document.createElement('div');
+					card.className = 'appt-card';
+					card.setAttribute('data-status', a.status.toLowerCase());
+
+					card.innerHTML = `
+						<div class="appt-left">
+							<img src="${a.dietitianPhoto || '/img/default-user.png'}" alt="${a.dietitianName}" />
+						</div>
+						<div class="appt-body">
+							<div class="appt-headline">${a.dietitianName}</div>
+							<div class="appt-meta">
+								<div><i class="fa-regular fa-calendar"></i> ${dateStr}</div>
+								<div><i class="fa-regular fa-clock"></i> ${start} - ${end}</div>
+								<div><i class="fa-solid fa-leaf"></i> ${a.specialtyName || ''}</div>
+							</div>
+							<div class="appt-status-badge ${statusClass}">
+								${statusIcon(a)} ${statusLabel}
+							</div>
+							<div class="appt-actions">
+								${canCancel ? `<button class="btn-cancel-appt" data-id="${a.appointmentId}"><i class="fa-solid fa-ban"></i> Cancel</button>` : ''}
+							</div>
+						</div>
+					`;
+					container.appendChild(card);
+				});
+
+				container.querySelectorAll('.btn-cancel-appt').forEach(btn => {
+					btn.addEventListener('click', () => {
+						const id = btn.getAttribute('data-id');
+						if (confirm('Do you really want to cancel this appointment?')) {
+							cancelAppointment(id);
+						}
+					});
+				});
+			}
+
+			function cancelAppointment(id){
+				fetch(`/User/AppointmentProxy/Cancel?id=${id}`, {
+					method: 'PUT'
+				})
+				.then(r => r.json().catch(()=>({})))
+				.then(resp => {
+					alert(resp.message || 'Cancelled.');
+					loadUserAppointments();
+				})
+				.catch(err => {
+					console.error(err);
+					alert('Cancellation failed.');
+				});
+			}
+
+			function mapStatusClass(a){
+				if (a.isPast && a.status === 'Approved') return 'appt-status-past';
+				switch(a.status){
+					case 'Pending': return 'appt-status-pending';
+					case 'Approved': return 'appt-status-approved';
+					case 'Rejected': return 'appt-status-rejected';
+					case 'Cancelled': return 'appt-status-cancelled';
+					default: return 'appt-status-past';
+				}
+			}
+			function mapStatusLabel(a){
+				if (a.isPast && a.status === 'Approved') return 'Past';
+				return a.status;
+			}
+			function statusIcon(a){
+				if (a.isPast && a.status === 'Approved') return '<i class="fa-solid fa-clock-rotate-left"></i>';
+				switch(a.status){
+					case 'Pending': return '<i class="fa-solid fa-hourglass-half"></i>';
+					case 'Approved': return '<i class="fa-solid fa-circle-check"></i>';
+					case 'Rejected': return '<i class="fa-solid fa-circle-xmark"></i>';
+					case 'Cancelled': return '<i class="fa-solid fa-ban"></i>';
+					default: return '<i class="fa-solid fa-info-circle"></i>';
+				}
+			}
+			function formatDateDisplay(dateStr){
+				const iso = dateStr.split('T')[0];
+				const [y,m,d] = iso.split('-').map(Number);
+				const dt = new Date(y, m-1, d);
+				return dt.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+
+			}
+
+		})();
+	</script>
+
+	<script>
+		(function(){
+
+		
+			let selectedDietitianId = null;
+			let selectedDateIso = null;
+			let selectedSlot = null;
+			const userId = @ViewBag.SubjectId; 
+
+			const dietitianApptBtn = document.getElementById('dp-appointment-btn');
+			if (dietitianApptBtn) {
+				dietitianApptBtn.addEventListener('click', function(e){
+					e.preventDefault();
+					selectedDietitianId = this.getAttribute('data-dietitian-id');
+					if(!selectedDietitianId){ alert('No dietitian id'); return; }
+
+					document.getElementById('appointment')?.scrollIntoView({behavior:'smooth'});
+					
+					loadCalendar(selectedDietitianId);
+				});
+			}
+
+			async function loadCalendar(dietitianId){
+				const grid = document.getElementById('calendar-grid');
+				grid.innerHTML = '<div class="text-light">Loading...</div>';
+
+				const url = `/User/AppointmentProxy/Calendar?dietitianId=${dietitianId}`;
+				const resp = await fetch(url);
+				if(!resp.ok){
+					grid.innerHTML = '<div class="text-danger">Takvim yüklenemedi.</div>';
+					return;
+				}
+				const days = await resp.json();
+				renderCalendar(days);
+			}
+
+				function formatDisplayDateFromString(isoDateStr){
+			const [y,m,d] = isoDateStr.split('-').map(Number);
+			const dt = new Date(y, m-1, d); 
+			return dt.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+		}
+
+				function renderCalendar(days){
+			const grid = document.getElementById('calendar-grid');
+			grid.innerHTML = '';
+
+			if (!Array.isArray(days) || days.length === 0) {
+				grid.innerHTML = '<div class="text-light">No calendar data.</div>';
+				return;
+			}
+
+			days.forEach(d => {
+				const raw = d.date; 
+				const dateIso = raw.split('T')[0];
+
+				const dateObj = new Date(raw); 
+				const dayNum = dateObj.getDate();
+				const dow = dateObj.toLocaleDateString('en-US', { weekday:'short' });
+
+				const div = document.createElement('div');
+				div.className = 'calendar-day ' + (d.isFull ? 'full' : 'available');
+				div.innerHTML = `
+					<span class="day-label">${dow}</span>
+					<span class="day-num">${dayNum}</span>
+				`;
+				if(!d.isFull){
+					div.dataset.date = dateIso;
+					div.addEventListener('click', () => openTimeSlots(dateIso));
+				}
+				grid.appendChild(div);
+			});
+		}
+
+			async function openTimeSlots(dateIso){
+				selectedDateIso = dateIso;
+				selectedSlot = null;
+				setConfirmDisabled(true);
+
+				 document.getElementById('selected-date-text').textContent = formatDisplayDateFromString(dateIso);
+
+				const overlay = document.getElementById('time-slot-overlay');
+				const listEl = document.getElementById('time-slot-list');
+				const dateTxt = document.getElementById('selected-date-text');
+
+				dateTxt.textContent = dateIso;
+				listEl.innerHTML = 'Loading...';
+				overlay.style.display = 'flex';
+				document.body.style.overflow = 'hidden';
+
+				const url = `/User/AppointmentProxy/Slots?dietitianId=${selectedDietitianId}&date=${dateIso}`;
+				const resp = await fetch(url);
+				if(!resp.ok){
+					listEl.innerHTML = '<div class="text-danger">Saatler yüklenemedi.</div>';
+					return;
+				}
+				const slots = await resp.json();
+				renderSlots(slots);
+			}
+
+			function renderSlots(slots){
+				const listEl = document.getElementById('time-slot-list');
+				listEl.innerHTML = '';
+				slots.forEach(s=>{
+					const div = document.createElement('div');
+					div.className = 'time-slot ' + (s.available ? 'available' : 'unavailable');
+					div.textContent = s.time;
+					if(s.available){
+						div.addEventListener('click', ()=>{
+							listEl.querySelectorAll('.time-slot').forEach(x=>x.classList.remove('selected'));
+							div.classList.add('selected');
+							selectedSlot = s.time;
+							setConfirmDisabled(false);
+						});
+					}
+					listEl.appendChild(div);
+				});
+			}
+
+			document.getElementById('confirm-appointment')?.addEventListener('click', async ()=>{
+				if(!selectedSlot || !selectedDateIso || !selectedDietitianId){
+					alert('Eksik seçim.');
+					return;
+				}
+				const parsed = parseSlot(selectedSlot); 
+				const payload = {
+					userId: userId,
+					dietitianId: parseInt(selectedDietitianId),
+					appointmentDate: selectedDateIso,
+					startTime: parsed.start,
+					endTime: parsed.end
+				};
+				const resp = await fetch('/User/AppointmentProxy/Create',{
+					method:'POST',
+					headers:{'Content-Type':'application/json'},
+					body:JSON.stringify(payload)
+				});
+				if(!resp.ok){
+					alert('Randevu oluşturulamadı.');
+					return;
+				}
+				const data = await resp.json().catch(() => ({ message: 'Randevu talebiniz alındı.' }));
+
+		Swal.fire({
+		  title: 'Randevu Talebi Oluşturuldu',
+		  text: data.message || 'Randevu talebiniz alındı, onay bekleniyor.',
+		  icon: 'success',
+		  showConfirmButton: true,
+		  confirmButtonText: 'Tamam',
+		  didClose: () => {
+			location.reload(); 
+		  }
+		});
+				closeTimeSlotOverlay();
+				loadCalendar(selectedDietitianId);
+			});
+
+			document.querySelectorAll('.close-time-slot').forEach(btn=>{
+				btn.addEventListener('click', closeTimeSlotOverlay);
+			});
+			function closeTimeSlotOverlay(){
+				const overlay = document.getElementById('time-slot-overlay');
+				overlay.style.display = 'none';
+				document.body.style.overflow = '';
+			}
+
+			function setConfirmDisabled(b){
+				const btn = document.getElementById('confirm-appointment');
+				if(btn) btn.disabled = b;
+			}
+
+			function parseSlot(txt){
+				const parts = txt.replace(/\s+/g,'').split('-');
+				return { start: parts[0], end: parts[1] ?? parts[0] };
+			}
+
+		})();
+	</script>
+
+	<script>
+		document.querySelectorAll('.scroll-link').forEach(a => {
+		  a.addEventListener('click', function(e){
+			const target = this.getAttribute('href');
+			if (target && target.startsWith('#')) {
+			  e.preventDefault();
+			  document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
+			}
+		  });
+		});
+
+		document.addEventListener('DOMContentLoaded', function(){
+		  const myAppointmentsLink = document.getElementById('nav-my-appointments');
+		  if (myAppointmentsLink) {
+			myAppointmentsLink.addEventListener('click', function(e){
+			  e.preventDefault();
+			  loadMyAppointments();
+			  const modal = new bootstrap.Modal(document.getElementById('myAppointmentsModal'));
+			  modal.show();
+			});
+		  }
+		});
+
+		function loadMyAppointments(){
+		  fetch('@Url.Action("MyAppointmentsPartial", "User", new { area = "User" })')
+		   .then(r => r.text())
+		   .then(html => {
+			  document.getElementById('myAppointmentsModalBody').innerHTML = html;
+		   })
+		   .catch(err => {
+			  document.getElementById('myAppointmentsModalBody').innerHTML = '<div class="text-danger">Randevular yüklenemedi.</div>';
+		   });
+		}
+
+				(function(){
+			const cards = document.querySelectorAll('.dietitian-card');
+			const overlay = document.getElementById('dietitianProfileOverlay');
+			if (!overlay) return;
+
+			const closeBtn = overlay.querySelector('.dietitian-profile-close');
+			const photoEl = document.getElementById('dp-photo');
+			const nameEl = document.getElementById('dp-name');
+			const specialtyEl = document.getElementById('dp-specialty');
+			const bioEl = document.getElementById('dp-biography');
+			const daysEl = document.getElementById('dp-days');
+			const hoursEl = document.getElementById('dp-hours');
+			const apptBtn = document.getElementById('dp-appointment-btn');
+
+			cards.forEach(card => {
+				const viewBtn = card.querySelector('.dietitian-view-btn');
+				const openTarget = viewBtn ?? card;
+				openTarget.addEventListener('click', function(e) {
+					e.preventDefault();
+
+					const id = card.dataset.dietitianId;
+					const name = card.dataset.dietitianName;
+					const spec = card.dataset.dietitianSpecialty;
+					const bio = card.dataset.dietitianBiography;
+					const days = card.dataset.dietitianWorkingdays;
+					const hours = card.dataset.dietitianWorkinghours;
+					const photo = card.dataset.dietitianPhoto;
+
+					photoEl.src = photo || '/img/default-user.png';
+					nameEl.textContent = name || '';
+					specialtyEl.textContent = spec || '';
+					bioEl.textContent = bio || '';
+					daysEl.textContent = days || '';
+					hoursEl.textContent = hours || '';
+
+					apptBtn.setAttribute('data-dietitian-id', id);
+
+					overlay.style.display = 'block';
+					document.body.style.overflow = 'hidden'; 
+				});
+			});
+
+			closeBtn.addEventListener('click', closeOverlay);
+			overlay.addEventListener('click', function(e){
+				if (e.target === overlay || e.target.classList.contains('dietitian-profile-backdrop')) {
+					closeOverlay();
+				}
+			});
+
+			function closeOverlay(){
+				overlay.style.display = 'none';
+				document.body.style.overflow = '';
+			}
+
+		})();
+	</script>
+}
