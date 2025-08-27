@@ -111,3 +111,57 @@ Her kullanıcıya özel token ile güvenli istekler yapılır.
 
 
 -----
+
+
+
+## 🖼️ Ekran Görüntüleri & GIF’ler
+
+##### GIF animasyonları birkaç saniyede görüntülenebilir.
+
+
+### 👤User Section
+
+
+#### Home 
+
+<img src="https://github.com/user-attachments/assets/d07a65f2-1c30-4b21-bdfb-148c11e75535" width="700"  />
+
+
+#### Departments
+
+<img src="https://github.com/user-attachments/assets/412690da-71f8-429e-ad5f-6b4deb1675d4" width="700"  />
+
+
+#### Dietitians
+
+<img src="https://github.com/user-attachments/assets/3a245083-f5ef-45a4-a254-7f7dd33b1650" width="700"  />
+
+
+#### Dietitian Information
+
+<img src="https://github.com/user-attachments/assets/ad4baaab-e065-4bb9-8beb-82c475506e5b" width="700"  />
+
+
+
+#### Appointment Section
+
+<img src="https://github.com/user-attachments/assets/f8b86b1b-bec9-4123-ac96-2fdda2fbe540" width="700"  />
+
+
+
+#### Appointment Section - Available Hours
+
+<img src="https://github.com/user-attachments/assets/8e40b188-5a53-470b-8082-f7a14827ed15" width="700"  />
+
+
+
+####  My Appointments 
+
+<img src="https://github.com/user-attachments/assets/1ce5d201-1303-4f1f-888e-b03577cce8d4" width="700"  />
+
+<img src="https://github.com/user-attachments/assets/51992630-cb8c-4600-ada1-3455550a1066" width="700"  />
+
+
+
+
+
