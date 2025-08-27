@@ -162,12 +162,6 @@ Her kullanıcıya özel token ile güvenli istekler yapılır.
 <img src="https://github.com/user-attachments/assets/51992630-cb8c-4600-ada1-3455550a1066" width="800"  />
 
 
-### 🔎Secretary Section
-
-
-
-
-### Dietitian Section
 
 
 
