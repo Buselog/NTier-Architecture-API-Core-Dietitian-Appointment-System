@@ -165,15 +165,9 @@ Her kullanıcıya özel token ile güvenli istekler yapılır.
 ### 🔎Secretary Section
 
 
-#### Home 
-
-<img src="https://github.com/user-attachments/assets/d07a65f2-1c30-4b21-bdfb-148c11e75535" width="700"  />
 
 
-
-#### Dietitians Process (Add, Delete) 
-
-<img src="https://github.com/user-attachments/assets/d07a65f2-1c30-4b21-bdfb-148c11e75535" width="800"  />
+### Dietitian Section
 
 
 
